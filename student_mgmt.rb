@@ -13,30 +13,27 @@
 #   don't worry about handling it. We'll get to that shortly.
 #
 ###############################################################################
-require './helpers'
+require_relative 'helpers'
 include Helpers
 
-students = Array.new
+require_relative 'student_utils'
+include Student_Utils
+
+roster = Roster.new
 
 while true
-  # Unpacking and assigning info.
   first, last, middle, address, email, phone = get_student_info
-  student = create_student(first_name: first,
-                           last_name: last,
-                           middle_inital: middle,
-                           address: address,
-                           email: email,
-                           phone: phone)
-  print_student student
+  student = Student.new first, last, middle, address, email, phone
 
-  if confirm('Is this information correct (Y/n) ')
-    # Append student to students array.
-    students << student
+  student.print_info()
 
-    if confirm ('Would you like to add another student\'s information (Y/n)? ')
+  if confirm('Is this information correct? (Y/n) ')
+    roster.add student
+
+    if confirm('Would you like to add another student to the roster? (Y/n) ')
       redo
     else
-      print print_summary students
+      roster.summarize
       break
     end
   end
