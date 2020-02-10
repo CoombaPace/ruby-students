@@ -13,56 +13,31 @@
 #   don't worry about handling it. We'll get to that shortly.
 #
 ###############################################################################
-
+require './helpers'
+include Helpers
 
 students = Array.new
-begin
 
-  student = Hash.new
+while true
+  # Unpacking and assigning info.
+  first, last, middle, address, email, phone = get_student_info
+  student = create_student(first_name: first,
+                           last_name: last,
+                           middle_inital: middle,
+                           address: address,
+                           email: email,
+                           phone: phone)
+  print_student student
 
-  print "Enter student\'s name. "
-  student[:first_name] = gets.chomp
+  if confirm('Is this information correct (Y/n) ')
+    # Append student to students array.
+    students << student
 
-  print "Enter student\'s last name. "
-  student[:last_name] = gets.chomp
-
-  print "Enter student\'s address. "
-  student[:address] = gets.chomp
-
-  print "Enter student\'s phone number: "
-  student[:phone] = gets.chomp
-
-  print "Enter student\'s email address: "
-  student[:email] = gets.chomp
-
-  puts "-*-" * 18
-  puts "Student Info: "
-  student.each do | key, value |
-    puts "The student\'s #{key} is #{value}."
-  end
-
-  puts "-*-" * 18
-
-  print "Is this information correct? y or n? "
-
-  if gets.chomp.downcase == "y"
-    students.push student
-    print "Would you like to enter another student? (y/n) "
-    if gets.chomp.downcase == "y"
-      next
+    if confirm ('Would you like to add another student\'s information (Y/n)? ')
+      redo
     else
-      puts "You\'ve entered the following student profiles:"
-      puts '-' * 18
-
-      students.each do | student |
-        student.each do | key, value |
-          puts "The sudent\'s #{key} is #{value}."
-        end
-      end
-
-      puts '-' * 18
-
+      print print_summary students
       break
     end
   end
-end while true
+end
